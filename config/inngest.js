@@ -19,7 +19,7 @@ export const syncUserCreation = inngest.createFunction(
         const { id, first_name, last_name, email_addresses, image_url } = event.data
         const userdata = {
             _id: id,
-            email: email_addressess[0].email_address,
+            email: email_addresses[0].email_address,
             name: first_name + '' + last_name,
             imageUrl: image_url
         }
@@ -39,7 +39,7 @@ export const syncUserUptation = inngest.createFunction(
         const { id, first_name, last_name, email_addresses, image_url } = event.data
         const userdata = {
             _id: id,
-            email: email_addressess[0].email_address,
+            email: email_addresses[0].email_address,
             name: first_name + '' + last_name,
             imageUrl: image_url
         }
