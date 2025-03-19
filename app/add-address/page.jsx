@@ -4,9 +4,13 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import Image from "next/image";
 import { useState } from "react";
+import { useAppContext } from "@/context/AppContext";
+import axios from "axios";
+import toast from "react-hot-toast";
 
 const AddAddress = () => {
 
+    const { getToken, router } = useAppContext()
     const [address, setAddress] = useState({
         fullName: '',
         phoneNumber: '',
@@ -19,6 +23,31 @@ const AddAddress = () => {
     const onSubmitHandler = async (e) => {
         e.preventDefault();
 
+        // Kiểm tra trường phoneNumber
+        if (!address.phoneNumber) {
+            toast.error("Phone number is required");
+            return;
+        }
+
+        // Kiểm tra định dạng số điện thoại
+        const phoneRegex = /^[0-9]{10}$/; // Kiểm tra số điện thoại có đúng định dạng 10 chữ số
+        if (!phoneRegex.test(address.phoneNumber)) {
+            toast.error("Invalid phone number format");
+            return;
+        }
+        try {
+            const token = await getToken()
+
+            const { data } = await axios.post('/api/user/add-address', { address }, { headers: { Authorization: `Bearer ${token}` } })
+            if (data.success) {
+                toast.success(data.message)
+                router.push('/cart')
+            } else {
+                toast.error(data.message)
+            }
+        } catch (error) {
+            toast.error(error.message)
+        }
     }
 
     return (
