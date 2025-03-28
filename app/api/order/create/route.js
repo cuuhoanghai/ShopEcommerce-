@@ -13,9 +13,9 @@ export async function POST(request) {
             return NextResponse.json({ success: false, message: "invalid data " });
         }
         // caculate amout using items
-        const amout = await items.reduce(async (acc, item) => {
+        const amount = await items.reduce(async (acc, item) => {
             const product = await Product.findById(item.product);
-            return acc + product.offerPrice * item.quantity;
+            return await acc + product.offerPrice * item.quantity;
         }, 0)
 
         await inngest.send({
